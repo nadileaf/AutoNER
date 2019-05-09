@@ -8,7 +8,7 @@ COLOR_RESET = "`tput sgr0`"
 
 # ==============================  Required  =============================
 # PROJECT_NAME = 'BC5CDR'
-PROJECT_NAME = 'PEOPLE'
+PROJECT_NAME = 'project'
 
 DATA_ROOT = os.path.join(ROOT, 'data', PROJECT_NAME)
 DATA_RAW_ROOT = os.path.join(ROOT, 'data', PROJECT_NAME, 'required')
@@ -37,6 +37,8 @@ TRAINING_PKL_FILE = os.path.join(DATA_GENERATE_ROOT, 'train_0.pk')
 DEV_PKL_FILE = os.path.join(DATA_GENERATE_ROOT, 'dev.pk')
 TEST_PKL_FILE = os.path.join(DATA_GENERATE_ROOT, 'test.pk')
 
+PRED_TRAINING_TXT_FILE = os.path.join(DATA_ROOT, 'generate/pred_training_text.txt')
+PRED_TRAINING_PKL_FILE = os.path.join(DATA_ROOT, 'generate/pred_training.pk')
 PRED_TEST_TXT_FILE = os.path.join(DATA_ROOT, 'generate/pred_test_text.txt')
 
 CHECKPOINT_DIR = os.path.join(MODEL_ROOT, 'checkpoint')
@@ -92,17 +94,17 @@ run(f"""
 python preprocess_partial_ner/encode_test.py \
     --input_data {TRAINING_TEXT} \
     --checkpoint_folder {CHECKPOINT_DIR}/{CHECKPOINT_NAME} \
-    --output_file {TEST_PKL_FILE}
+    --output_file {PRED_TRAINING_PKL_FILE}
 """)
 
 
 run(f"echo {GREEN}=== Evaluate AutoNER Model ==={COLOR_RESET}")
 run(f"""
 python test_partial_ner.py \
-    --input_corpus {TEST_PKL_FILE} \
+    --input_corpus {PRED_TRAINING_PKL_FILE} \
     --checkpoint_folder {CHECKPOINT_DIR}/{CHECKPOINT_NAME} \
-    --output_text {PRED_TEST_TXT_FILE} \
+    --output_text {PRED_TRAINING_TXT_FILE} \
     --hid_dim 300 \
     --droprate 0.5 \
-    --word_dim 200
+    --word_dim 300 \
 """)
