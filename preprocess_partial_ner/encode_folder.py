@@ -36,6 +36,10 @@ def build_label_mapping(train_file, dev_file, test_file):
         for line in open(filename):
             if not (line.isspace() or (len(line) > 10 and line[0:10] == '-DOCSTART-')):
                 line = line.rstrip('\n').split()
+
+                if len(line) != 4:
+                    continue
+
                 assert len(line) >= 3 and len(line) <= 4, "the format of noisy corpus"
                 # The format should be
                 # 0. Token
@@ -60,7 +64,10 @@ def read_noisy_corpus(lines):
     for line in lines:
         if not (line.isspace() or (len(line) > 10 and line[0:10] == '-DOCSTART-')):
             line = line.rstrip('\n').split()
-            
+
+            if len(line) != 4:
+                continue
+
             assert len(line) >= 3 and len(line) <= 4, "the format of noisy corpus"
             # The format should be
             # 0. Token
@@ -111,6 +118,9 @@ def read_corpus(lines):
     for line in lines:
         if not (line.isspace() or (len(line) > 10 and line[0:10] == '-DOCSTART-')):
             line = line.rstrip('\n').split()
+
+            if len(line) !=3 or len(line) != 4:
+                continue
 
             assert len(line) == 3, "the format of corpus"
             # The format should be
